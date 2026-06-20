@@ -1,72 +1,44 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import TinaIsland from '@tinacms/astro/TinaIsland.astro';
-import PostBody from '../components/tina/PostBody.astro';
-import { islands } from '../lib/tina/islands';
-import { getPostList } from '../lib/tina/data';
+import { getCollection } from 'astro:content';
 
-const result = await getPostList();
-const posts = result.data?.postConnection?.edges
-  ?.map((edge) => edge?.node)
-  .filter(Boolean)
-  .sort((a, b) => new Date(b?.pubDate ?? 0).getTime() - new Date(a?.pubDate ?? 0).getTime()) ?? [];
+const posts = await getCollection('blog');
+posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 ---
 
 <Layout title="Studio Blog" description="Design thinking, AI workflows, and building the future of creative work.">
   <div class="min-h-screen">
-    <!-- Header -->
     <header class="border-b-3 border-border bg-secondary text-secondary-foreground">
       <div class="mx-auto max-w-4xl px-6 py-8 md:py-12">
         <div class="flex items-center gap-3 mb-2">
-          <span class="bg-primary text-primary-foreground px-3 py-1 text-xs font-bold border border-border border-r-2 border-b-2">
-            STUDIO
-          </span>
+          <span class="bg-primary text-primary-foreground px-3 py-1 text-xs font-bold border border-border border-r-2 border-b-2">STUDIO</span>
         </div>
-        <h1 class="font-head text-4xl md:text-6xl leading-tight">
-          Thoughts &amp; Process
-        </h1>
-        <p class="text-lg md:text-xl mt-3 opacity-80 max-w-2xl">
-          Design thinking, AI workflows, and building systems that make better creative work.
-        </p>
+        <h1 class="font-head text-4xl md:text-6xl leading-tight">Thoughts &amp; Process</h1>
+        <p class="text-lg md:text-xl mt-3 opacity-80 max-w-2xl">Design thinking, AI workflows, and building systems that make better creative work.</p>
       </div>
     </header>
 
-    <!-- Posts -->
     <main class="mx-auto max-w-4xl px-6 py-12">
       {posts.length > 0 ? (
         <div class="space-y-8">
           {posts.map((post) => (
             <article class="bk-border bk-shadow bg-white p-6 md:p-8 hover:translate-x-[3px] hover:translate-y-[3px] hover:shadow-sm transition-all duration-90">
               <div class="flex flex-wrap items-center gap-2 text-sm font-medium text-muted-foreground mb-3">
-                {post?.pubDate && (
-                  <time datetime={post.pubDate}>
-                    {new Date(post.pubDate).toLocaleDateString('en-US', {
-                      year: 'numeric', month: 'long', day: 'numeric',
-                    })}
-                  </time>
-                )}
-                {post?.tags && post.tags.length > 0 && (
+                <time datetime={post.data.pubDate.toISOString()}>
+                  {post.data.pubDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+                </time>
+                {post.data.tags.length > 0 && (
                   <span class="flex gap-1.5 flex-wrap">
-                    {post.tags.filter(Boolean).map((tag) => (
-                      <span class="bg-primary text-primary-foreground px-2 py-0.5 text-xs font-bold border border-border">
-                        {tag}
-                      </span>
+                    {post.data.tags.map((tag) => (
+                      <span class="bg-primary text-primary-foreground px-2 py-0.5 text-xs font-bold border border-border">{tag}</span>
                     ))}
                   </span>
                 )}
               </div>
-
               <h2 class="font-head text-2xl md:text-3xl leading-tight mb-2">
-                <a href={`/blog/${post?._sys?.filename}`} class="hover:underline underline-offset-4 decoration-4 decoration-primary no-underline text-foreground">
-                  {post?.title}
-                </a>
+                <a href={`/blog/${post.id}/`} class="hover:underline underline-offset-4 decoration-4 decoration-primary no-underline text-foreground">{post.data.title}</a>
               </h2>
-
-              {post?.description && (
-                <p class="text-muted-foreground text-base leading-relaxed">
-                  {post.description}
-                </p>
-              )}
+              <p class="text-muted-foreground text-base leading-relaxed">{post.data.description}</p>
             </article>
           ))}
         </div>
@@ -77,11 +49,8 @@ const posts = result.data?.postConnection?.edges
       )}
     </main>
 
-    <!-- Footer -->
     <footer class="border-t-3 border-border bg-secondary text-secondary-foreground">
-      <div class="mx-auto max-w-4xl px-6 py-8 text-center text-sm opacity-70">
-        Studio Blog &copy; {new Date().getFullYear()}
-      </div>
+      <div class="mx-auto max-w-4xl px-6 py-8 text-center text-sm opacity-70">Studio Blog &copy; {new Date().getFullYear()}</div>
     </footer>
   </div>
 </Layout>
