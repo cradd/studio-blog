@@ -5,13 +5,12 @@ import PageBody from '../components/tina/PageBody.astro';
 import { islands } from '../lib/tina/islands';
 import { getPage } from '../lib/tina/data';
 
-const { slug } = Astro.params;
-const result = await getPage(slug ?? '');
+const slug = 'about';
+const result = await getPage(slug);
 const page = result.data?.page;
-if (!page) return Astro.redirect('/404');
 ---
 
-<Layout title={`${page.title} — Studio Blog`}>
+<Layout title={`${page?.title ?? 'About'} — Studio Blog`}>
   <div class="min-h-screen">
     <!-- Top bar -->
     <div class="border-b-3 border-border bg-secondary text-secondary-foreground">
@@ -26,9 +25,16 @@ if (!page) return Astro.redirect('/404');
     </div>
 
     <!-- Page with visual editing -->
-    <TinaIsland name="page" wrapper={islands.page.wrapper} params={{ slug: slug ?? '' }} primary>
-      <PageBody data={page} />
-    </TinaIsland>
+    {page ? (
+      <TinaIsland name="page" wrapper={islands.page.wrapper} params={{ slug }} primary>
+        <PageBody data={page} />
+      </TinaIsland>
+    ) : (
+      <div class="max-w-3xl mx-auto px-6 py-12">
+        <h1 class="font-head text-3xl md:text-5xl leading-tight mb-6">About</h1>
+        <p class="text-muted-foreground">Page content coming soon.</p>
+      </div>
+    )}
 
     <!-- Footer -->
     <footer class="border-t-3 border-border bg-secondary text-secondary-foreground">
