@@ -1,10 +1,15 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import PostCard from '../components/PostCard.astro';
-import { getCollection } from 'astro:content';
+import TinaIsland from '@tinacms/astro/TinaIsland.astro';
+import PostBody from '../components/tina/PostBody.astro';
+import { islands } from '../lib/tina/islands';
+import { getPostList } from '../lib/tina/data';
 
-const posts = await getCollection('blog', ({ data }) => !data.draft);
-posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+const result = await getPostList();
+const posts = result.data?.postConnection?.edges
+  ?.map((edge) => edge?.node)
+  .filter(Boolean)
+  .sort((a, b) => new Date(b?.pubDate ?? 0).getTime() - new Date(a?.pubDate ?? 0).getTime()) ?? [];
 ---
 
 <Layout title="Studio Blog" description="Design thinking, AI workflows, and building the future of creative work.">
@@ -31,7 +36,38 @@ posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
       {posts.length > 0 ? (
         <div class="space-y-8">
           {posts.map((post) => (
-            <PostCard post={post} />
+            <article class="bk-border bk-shadow bg-white p-6 md:p-8 hover:translate-x-[3px] hover:translate-y-[3px] hover:shadow-sm transition-all duration-90">
+              <div class="flex flex-wrap items-center gap-2 text-sm font-medium text-muted-foreground mb-3">
+                {post?.pubDate && (
+                  <time datetime={post.pubDate}>
+                    {new Date(post.pubDate).toLocaleDateString('en-US', {
+                      year: 'numeric', month: 'long', day: 'numeric',
+                    })}
+                  </time>
+                )}
+                {post?.tags && post.tags.length > 0 && (
+                  <span class="flex gap-1.5 flex-wrap">
+                    {post.tags.filter(Boolean).map((tag) => (
+                      <span class="bg-primary text-primary-foreground px-2 py-0.5 text-xs font-bold border border-border">
+                        {tag}
+                      </span>
+                    ))}
+                  </span>
+                )}
+              </div>
+
+              <h2 class="font-head text-2xl md:text-3xl leading-tight mb-2">
+                <a href={`/blog/${post?._sys?.filename}`} class="hover:underline underline-offset-4 decoration-4 decoration-primary no-underline text-foreground">
+                  {post?.title}
+                </a>
+              </h2>
+
+              {post?.description && (
+                <p class="text-muted-foreground text-base leading-relaxed">
+                  {post.description}
+                </p>
+              )}
+            </article>
           ))}
         </div>
       ) : (

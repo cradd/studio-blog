@@ -1,0 +1,55 @@
+---
+interface Props {
+  data: {
+    title?: string | null;
+    description?: string | null;
+    pubDate?: string | null;
+    tags?: (string | null)[] | null;
+    body?: unknown | null;
+  };
+}
+
+const { data } = Astro.props;
+import TinaMarkdown from '@tinacms/astro/TinaMarkdown.astro';
+---
+
+<div class="max-w-3xl mx-auto px-6 py-12">
+  <!-- Meta -->
+  <div class="flex flex-wrap items-center gap-3 text-sm font-medium text-muted-foreground mb-4">
+    {data.pubDate && (
+      <time datetime={data.pubDate}>
+        {new Date(data.pubDate).toLocaleDateString('en-US', {
+          year: 'numeric', month: 'long', day: 'numeric',
+        })}
+      </time>
+    )}
+    {data.tags && data.tags.length > 0 && (
+      <span class="flex gap-1.5 flex-wrap">
+        {data.tags.filter(Boolean).map((tag) => (
+          <span class="bg-primary text-primary-foreground px-2 py-0.5 text-xs font-bold border border-border">
+            {tag}
+          </span>
+        ))}
+      </span>
+    )}
+  </div>
+
+  <!-- Title -->
+  <h1 class="font-head text-3xl md:text-5xl leading-tight mb-6">
+    {data.title}
+  </h1>
+
+  <!-- Description -->
+  {data.description && (
+    <p class="text-lg text-muted-foreground mb-8 leading-relaxed">
+      {data.description}
+    </p>
+  )}
+
+  <!-- Body -->
+  {data.body && (
+    <div class="prose">
+      <TinaMarkdown content={data.body} />
+    </div>
+  )}
+</div>
