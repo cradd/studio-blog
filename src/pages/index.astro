@@ -1,11 +1,51 @@
 ---
-import Welcome from '../components/Welcome.astro';
 import Layout from '../layouts/Layout.astro';
+import PostCard from '../components/PostCard.astro';
+import { getCollection } from 'astro:content';
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+const posts = await getCollection('blog', ({ data }) => !data.draft);
+posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 ---
 
-<Layout>
-	<Welcome />
+<Layout title="Studio Blog" description="Design thinking, AI workflows, and building the future of creative work.">
+  <div class="min-h-screen">
+    <!-- Header -->
+    <header class="border-b-3 border-border bg-secondary text-secondary-foreground">
+      <div class="mx-auto max-w-4xl px-6 py-8 md:py-12">
+        <div class="flex items-center gap-3 mb-2">
+          <span class="bg-primary text-primary-foreground px-3 py-1 text-xs font-bold border border-border border-r-2 border-b-2">
+            STUDIO
+          </span>
+        </div>
+        <h1 class="font-head text-4xl md:text-6xl leading-tight">
+          Thoughts &amp; Process
+        </h1>
+        <p class="text-lg md:text-xl mt-3 opacity-80 max-w-2xl">
+          Design thinking, AI workflows, and building systems that make better creative work.
+        </p>
+      </div>
+    </header>
+
+    <!-- Posts -->
+    <main class="mx-auto max-w-4xl px-6 py-12">
+      {posts.length > 0 ? (
+        <div class="space-y-8">
+          {posts.map((post) => (
+            <PostCard post={post} />
+          ))}
+        </div>
+      ) : (
+        <div class="bk-border bk-shadow bg-white p-12 text-center">
+          <p class="text-xl font-head text-muted-foreground">No posts yet — first one coming soon.</p>
+        </div>
+      )}
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t-3 border-border bg-secondary text-secondary-foreground">
+      <div class="mx-auto max-w-4xl px-6 py-8 text-center text-sm opacity-70">
+        Studio Blog &copy; {new Date().getFullYear()}
+      </div>
+    </footer>
+  </div>
 </Layout>

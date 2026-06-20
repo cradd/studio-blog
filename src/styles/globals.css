@@ -1,0 +1,164 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* ── BoldKit Custom Theme: Rethemed to green/cream ── */
+@theme inline {
+  --font-head: "Archivo Black", sans-serif;
+  --font-sans: "Space Grotesk", sans-serif;
+
+  /* BoldKit strictly uses sharp 0px corners by default */
+  --radius: 0px;
+
+  /* Thick 3px borders are BoldKit's signature */
+  --shadow-xs: 1px 1px 0 0 var(--border);
+  --shadow-sm: 2px 2px 0 0 var(--border);
+  --shadow: 4px 4px 0 0 var(--border);
+  --shadow-md: 6px 6px 0 0 var(--border);
+  --shadow-lg: 8px 8px 0 0 var(--border);
+  --shadow-xl: 12px 12px 0 1px var(--border);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+
+  /* BoldKit / Retro palette colors */
+  --color-green: #93f27d;
+  --color-pink: #ff7bdc;
+  --color-yellow: #ffd43d;
+  --color-blue: #78d6ff;
+  --color-purple: #c9a1ff;
+  --color-orange: #ff7a5c;
+  --font-heading: var(--font-sans);
+}
+
+:root {
+  --radius: 0px;                     /* raw, sharp neo-brutalist */
+  --background: #fae9cc;             /* paper / cream */
+  --foreground: #0b0b0b;            /* ink */
+  --card: #ffffff;
+  --card-foreground: #0b0b0b;
+  --primary: #93f27d;               /* brand green */
+  --primary-hover: #7be861;
+  --primary-foreground: #0b0b0b;
+  --secondary: #0b0b0b;
+  --secondary-foreground: #ffffff;
+  --muted: #e7dcc4;
+  --muted-foreground: #5a5247;
+  --accent: #ffd43d;                /* yellow */
+  --accent-foreground: #0b0b0b;
+  --destructive: #ff7a5c;
+  --destructive-foreground: #0b0b0b;
+  --border: #0b0b0b;
+  --input: #ffffff;
+}
+
+body {
+  font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+  background-color: var(--background);
+  color: var(--foreground);
+}
+
+h1, h2, h3, .font-head {
+  font-family: var(--font-head), var(--font-sans), sans-serif;
+}
+
+/* BoldKit-style thick helper classes */
+.bk-border { border: 3px solid var(--border); }
+.bk-shadow { box-shadow: var(--shadow); }
+.bk-press { transition: transform 90ms ease, box-shadow 90ms ease; }
+.bk-press:hover { transform: translate(3px, 3px); box-shadow: var(--shadow-sm); }
+.bk-press:active { transform: translate(5px, 5px); box-shadow: none; }
+
+/* Typography for blog content */
+.prose {
+  max-width: 65ch;
+  line-height: 1.75;
+  font-size: 1.0625rem;
+}
+.prose h2 {
+  font-family: var(--font-head);
+  font-size: 1.75rem;
+  margin-top: 2.5rem;
+  margin-bottom: 0.75rem;
+}
+.prose h3 {
+  font-family: var(--font-head);
+  font-size: 1.25rem;
+  margin-top: 2rem;
+  margin-bottom: 0.5rem;
+}
+.prose p {
+  margin-bottom: 1.25rem;
+}
+.prose a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 2px;
+  text-decoration-color: var(--primary);
+}
+.prose a:hover {
+  color: var(--foreground);
+  background-color: var(--primary);
+}
+.prose blockquote {
+  border-left: 6px solid var(--primary);
+  padding-left: 1rem;
+  margin: 1.5rem 0;
+  font-style: italic;
+  color: var(--muted-foreground);
+}
+.prose code {
+  font-family: "JetBrains Mono", "Fira Code", monospace;
+  font-size: 0.875em;
+  background-color: var(--muted);
+  padding: 0.125rem 0.375rem;
+  border: 1px solid var(--border);
+}
+.prose pre {
+  background-color: var(--secondary);
+  color: var(--secondary-foreground);
+  padding: 1.25rem;
+  border: 3px solid var(--border);
+  box-shadow: var(--shadow);
+  overflow-x: auto;
+  margin: 1.5rem 0;
+}
+.prose pre code {
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: 0.8125rem;
+}
+.prose ul, .prose ol {
+  padding-left: 1.5rem;
+  margin-bottom: 1.25rem;
+}
+.prose li {
+  margin-bottom: 0.375rem;
+}
+.prose img {
+  border: 3px solid var(--border);
+  box-shadow: var(--shadow);
+  margin: 2rem 0;
+}
+.prose hr {
+  border: none;
+  border-top: 3px solid var(--border);
+  margin: 2.5rem 0;
+}
