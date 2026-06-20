@@ -1,16 +1,8 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import TinaIsland from '@tinacms/astro/TinaIsland.astro';
-import PageBody from '../components/tina/PageBody.astro';
-import { islands } from '../lib/tina/islands';
-import { getPage } from '../lib/tina/data';
-
-const slug = 'about';
-const result = await getPage(slug);
-const page = result.data?.page;
 ---
 
-<Layout title={`${page?.title ?? 'About'} — Studio Blog`}>
+<Layout title="About — Studio Blog">
   <div class="min-h-screen">
     <!-- Top bar -->
     <div class="border-b-3 border-border bg-secondary text-secondary-foreground">
@@ -24,17 +16,17 @@ const page = result.data?.page;
       </div>
     </div>
 
-    <!-- Page with visual editing -->
-    {page ? (
-      <TinaIsland name="page" wrapper={islands.page.wrapper} params={{ slug }} primary>
-        <PageBody data={page} />
-      </TinaIsland>
-    ) : (
-      <div class="max-w-3xl mx-auto px-6 py-12">
-        <h1 class="font-head text-3xl md:text-5xl leading-tight mb-6">About</h1>
-        <p class="text-muted-foreground">Page content coming soon.</p>
+    <div class="max-w-3xl mx-auto px-6 py-12">
+      <h1 class="font-head text-3xl md:text-5xl leading-tight mb-6">About</h1>
+      <div class="prose">
+        <p>
+          Built by Chris Radd — a professional designer working across advertising campaigns, CPG packaging, websites, print, OOH, and motion. This blog is a space for thinking out loud, sharing process, and building in public.
+        </p>
+        <p>
+          Studio Blog runs on <strong>Astro</strong>, <strong>BoldKit</strong>, and <strong>TinaCMS</strong> — deployed to <strong>Cloudflare Pages</strong>.
+        </p>
       </div>
-    )}
+    </div>
 
     <!-- Footer -->
     <footer class="border-t-3 border-border bg-secondary text-secondary-foreground">
